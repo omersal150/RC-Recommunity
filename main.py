@@ -25,7 +25,7 @@ def home():
 
 def register():
     if request.method == 'POST':
-        username = request.form.get('username')  # Get username from form
+        username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
 
@@ -39,14 +39,14 @@ def register():
             # Hash the password
             hashed_password = generate_password_hash(password)
 
-            # Create a new user document
+            # Create a new user in DB
             new_user = {
                 'username': username,
                 'email': email,
-                'password': hashed_password
+                'password': hashed_password # ADD THE DOB SECTION TO DB
             }
 
-            # Insert the new user into the database
+            # Insert the new user into the DB
             mongo.db.users.insert_one(new_user)
 
             flash('Registration successful. Please log in.', 'success')
@@ -74,7 +74,7 @@ def login():
             flash('Invalid username/email or password combination.', 'error')
             return render_template('login.html')
 
-    # If it's a GET request, simply render the login page
+    # If fails render to login again after GET request
     return render_template('login.html')
 
 @app.route('/logout')
