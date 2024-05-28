@@ -18,10 +18,11 @@ def index():
 @app.route('/home')
 def home():
     if 'username' in session:
-        return render_template('home.html', username=session['username'])
+        username = session['username']  # Get username from session
+        return render_template('home.html', username=username)  # Pass username to template
     return redirect(url_for('login'))
-
 @app.route('/register', methods=['GET', 'POST'])
+
 def register():
     if request.method == 'POST':
         username = request.form.get('username')  # Get username from form
@@ -79,7 +80,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
