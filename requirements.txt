@@ -1,0 +1,6 @@
+Flask
+Flask-PyMongo
+pymongo
+Werkzeug
+requests
+datetime
