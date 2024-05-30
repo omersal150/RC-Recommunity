@@ -1,0 +1,64 @@
+replicaCount: 1
+
+image:
+  repository: rc-recommunity-web
+  pullPolicy: IfNotPresent
+  tag: latest
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+
+resources:
+  limits:
+    cpu: "1"
+    memory: "512Mi"
+  requests:
+    cpu: "100m"
+    memory: "256Mi"
+
+livenessProbe:
+  httpGet:
+    path: /healthcheck
+    port: http
+  initialDelaySeconds: 15
+  periodSeconds: 10
+
+readinessProbe:
+  httpGet:
+    path: /healthcheck
+    port: http
+  initialDelaySeconds: 5
+  periodSeconds: 10
+
+autoscaling:
+  enabled: false
+
+pythonDependencies:
+  - name: flask
+    version: "1.1.2"
+  - name: flask-pymongo
+    version: "2.3.0"
+  - name: pymongo
+    version: "3.11.2"
+  - name: werkzeug
+    version: "1.0.1"
+  - name: requests
+    version: "2.25.1"
+  - name: datetime
+
+# Add any additional configuration specific to your Flask app here
+# For example, environment variables, secret mounts, etc.
+# env:
+#   - name: FLASK_ENV
+#     value: production
+#   - name: MONGO_URI
+#     valueFrom:
+#       secretKeyRef:
+#         name: mongo-credentials
+#         key: mongo-uri
+# volumeMounts: []
+# volumes: []
