@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Models</title>
+    <title>Search Results for "{{ query }}"</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: #ffffff url(https://i.ytimg.com/vi/PEhFeRjd8BA/maxresdefault.jpg) center 5%/cover no-repeat;
+            background: #ffffff;
         }
         .header {
             background-color: #4f4f4f;
@@ -54,8 +54,8 @@
 
     <div class="header">
         <button onclick="window.location.href='/home'">Home</button>
-        <form action="#" method="GET">
-            <input type="text" name="search" placeholder="Search...">
+        <form action="/search" method="GET">
+            <input type="text" name="query" value="{{ query }}" placeholder="Search models...">
             <button type="submit">Search</button>
         </form>
         <form action="/logout" method="GET">
@@ -64,13 +64,17 @@
     </div>
     
     <div class="container">
-        <h1>Models</h1>
+        <h1>Search Results for "{{ query }}"</h1>
         <ul class="model-list">
-            {% for model in models %}
-                <li>
-                    <a href="{{ url_for('model_detail', model_id=model._id) }}">{{ model.model_name }}</a>
-                </li>
-            {% endfor %}
+            {% if models|length == 0 %}
+                <li>No models found.</li>
+            {% else %}
+                {% for model in models %}
+                    <li>
+                        <a href="{{ url_for('model_detail', model_id=model._id) }}">{{ model.model_name }}</a>
+                    </li>
+                {% endfor %}
+            {% endif %}
         </ul>
     </div>
     

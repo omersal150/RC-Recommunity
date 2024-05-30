@@ -4,3 +4,5 @@ pymongo
 Werkzeug
 requests
 datetime
+son.objectid
+ObjectId

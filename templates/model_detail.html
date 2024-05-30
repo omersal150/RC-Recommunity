@@ -9,7 +9,10 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: #ffffff url(https://i.ytimg.com/vi/PEhFeRjd8BA/maxresdefault.jpg) center 5%/cover no-repeat;
         }
         .header {
             background-color: #4f4f4f;
@@ -20,30 +23,48 @@
             align-items: center;
         }
         .container {
-            text-align: center;
+            flex: 1;
             padding: 20px;
         }
         .footer {
             background-color: #6e6d6d;
             padding: 10px;
             text-align: center;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
         }
         .footer p {
             margin-bottom: 0;
         }
-        .model-detail {
-            text-align: left;
-            max-width: 800px;
-            margin: 0 auto;
-            background: #f4f4f4;
-            padding: 20px;
-            border-radius: 10px;
+        .comment-form {
+            margin-top: 20px;
         }
-        .model-detail h2 {
-            margin-top: 0;
+        .comment-form textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .comment {
+            background-color: #f4f4f4;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .comment .text {
+            margin-bottom: 5px;
+        }
+        .comment .user {
+            font-style: italic;
+        }
+        /* Style for images */
+        .media img {
+            width: 500px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        /* Style for videos */
+        .media iframe {
+            width: 560px;
+            height: 315px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -51,8 +72,8 @@
 
     <div class="header">
         <button onclick="window.location.href='/home'">Home</button>
-        <form action="#" method="GET">
-            <input type="text" name="search" placeholder="Search...">
+        <form action="/search" method="GET">
+            <input type="text" name="query" placeholder="Search models...">
             <button type="submit">Search</button>
         </form>
         <form action="/logout" method="GET">
@@ -61,18 +82,52 @@
     </div>
     
     <div class="container">
-        <div class="model-detail">
-            <h2>{{ model.model_name }}</h2>
-            <p><strong>Manufacture:</strong> {{ model.manufacture }}</p>
-            <p><strong>Year of Release:</strong> {{ model.year_of_release }}</p>
-            <p><strong>Description:</strong> {{ model.description }}</p>
-            <p><strong>Pro's/Con's:</strong> {{ model.pros_cons }}</p>
-            {% if 'youtube.com' in model.media_link %}
-                <iframe width="560" height="315" src="{{ model.media_link }}" frameborder="0" allowfullscreen></iframe>
-            {% else %}
-                <img src="{{ model.media_link }}" alt="{{ model.model_name }}" style="max-width: 100%;">
+        <h1>{{ model.model_name }}</h1>
+        <p>Manufacture: {{ model.manufacture }}</p>
+        <p>Year of release: {{ model.year_of_release }}</p>
+        <p>Description: {{ model.description }}</p>
+        <p>Pro's/Con's: {{ model.pros_cons }}</p>
+        <div class="media">
+            {% if model.image_urls %}
+                <h2>Images</h2>
+                <div class="image-gallery">
+                    {% for image_url in model.image_urls %}
+                        <img src="{{ image_url }}" alt="{{ model.model_name }}">
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% if model.video_url %}
+                <h2>Video</h2>
+                <div class="video-gallery">
+                    <iframe width="560" height="315" src="{{ model.video_url }}" frameborder="0" allowfullscreen></iframe>
+                </div>
             {% endif %}
         </div>
+
+        <h2 style="margin-top: 30px;">Comments</h2>
+        <div class="comments">
+            {% for comment in comments %}
+                <div class="comment">
+                    <p class="text">{{ comment.text }}</p>
+                    <p class="rating">Rating: {{ comment.rating }} stars</p>
+                    <p class="user">by {{ comment.username }}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h2>Add a Comment</h2>
+        <form class="comment-form" action="{{ url_for('add_comment', model_id=model._id) }}" method="POST">
+            <textarea name="comment" placeholder="Write your comment..."></textarea>
+            <label for="rating">Rating:</label>
+            <select name="rating">
+                <option value="1">1 star</option>
+                <option value="2">2 stars</option>
+                <option value="3">3 stars</option>
+                <option value="4">4 stars</option>
+                <option value="5">5 stars</option>
+            </select>
+            <button type="submit">Submit</button>
+        </form>
     </div>
     
     <div class="footer">

@@ -38,6 +38,9 @@ def add_model():
         year_of_release = request.form.get('year_of_release')
         description = request.form.get('description')
         pros_cons = request.form.get('pros_cons')
+        image_urls = [
+            request.form.get(f'image_url_{i+1}') for i in range(3)
+        ]  # Get up to 3 image URLs
         
         new_model = {
             'media_link': media_link,
@@ -46,6 +49,7 @@ def add_model():
             'year_of_release': year_of_release,
             'description': description,
             'pros_cons': pros_cons,
+            'image_urls': image_urls,  # Add image URLs to the model data
             'created_by': session['username'],
             'created_at': datetime.utcnow()
         }
@@ -122,16 +126,48 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
+@app.route('/search')
+def search():
+    if 'username' in session:
+        query = request.args.get('query', '')
+        if query:
+            models = list(mongo.db.models.find({'model_name': {'$regex': query, '$options': 'i'}}))
+        else:
+            models = []
+        return render_template('search_results.html', models=models, query=query)
+    return redirect(url_for('login'))
+
 @app.route('/model/<model_id>')
 def model_detail(model_id):
     if 'username' in session:
         model = mongo.db.models.find_one({'_id': ObjectId(model_id)})
-        if model:
-            return render_template('model_detail.html', model=model)
-        else:
-            flash('Model not found!', 'error')
-            return redirect(url_for('models'))
+        comments = list(mongo.db.comments.find({'model_id': model_id}))
+
+        # Transform YouTube URL if necessary
+        if 'youtube.com/watch?v=' in model.get('video_url', ''):
+            model['video_url'] = model['video_url'].replace('watch?v=', 'embed/')
+
+        return render_template('model_detail.html', model=model, comments=comments)
     return redirect(url_for('login'))
-    
+
+@app.route('/model/<model_id>/comment', methods=['POST'])
+def add_comment(model_id):
+    if 'username' in session:
+        username = session['username']
+        comment_text = request.form.get('comment')
+        rating = int(request.form.get('rating'))
+
+        comment = {
+            'model_id': model_id,
+            'username': username,
+            'text': comment_text,
+            'rating': rating,
+            'date': datetime.now()
+        }
+
+        mongo.db.comments.insert_one(comment)
+        return redirect(url_for('model_detail', model_id=model_id))
+    return redirect(url_for('login'))
+
 if __name__ == '__main__':
     app.run(debug=True)

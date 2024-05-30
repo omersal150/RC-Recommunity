@@ -10,6 +10,9 @@
             margin: 0;
             padding: 0;
             background: #ffffff url(https://i.ytimg.com/vi/PEhFeRjd8BA/maxresdefault.jpg) center 5%/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         .header {
             background-color: #4f4f4f;
@@ -22,14 +25,16 @@
         .container {
             text-align: center;
             padding: 20px;
+            flex: 1;
+            margin-bottom: 100px; /* Add margin to create space between form and footer */
         }
         .footer {
             background-color: #6e6d6d;
             padding: 10px;
             text-align: center;
-            position: absolute;
-            bottom: 0;
             width: 100%;
+            position: fixed;
+            bottom: 0;
         }
         .footer p {
             margin-bottom: 0;
@@ -96,6 +101,18 @@
                 <div class="form-group">
                     <label for="pros_cons">Pro's/Con's:</label>
                     <textarea id="pros_cons" name="pros_cons" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="image_url1">Image URL 1:</label>
+                    <input type="text" id="image_url1" name="image_url_1">
+                </div>
+                <div class="form-group">
+                    <label for="image_url2">Image URL 2:</label>
+                    <input type="text" id="image_url2" name="image_url_2">
+                </div>
+                <div class="form-group">
+                    <label for="image_url3">Image URL 3:</label>
+                    <input type="text" id="image_url3" name="image_url_3">
                 </div>
                 <button type="submit">Add Model</button>
             </form>
