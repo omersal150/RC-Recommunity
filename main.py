@@ -7,7 +7,7 @@ from bson.objectid import ObjectId
 
 app = Flask(__name__)
 app.secret_key = "337234"
-app.config["MONGO_URI"] = "mongodb://localhost:27017/rc_recommunity"
+app.config["MONGO_URI"] = "mongodb://mongo:27017/rc_recommunity"
 mongo = PyMongo(app)
 
 @app.route('/')

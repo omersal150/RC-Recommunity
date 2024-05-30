@@ -1,8 +1,6 @@
-Flask
-Flask-PyMongo
+flask
+flask-pymongo
 pymongo
-Werkzeug
+werkzeug
 requests
 datetime
-son.objectid
-ObjectId

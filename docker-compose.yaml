@@ -7,11 +7,12 @@ services:
       - "5000:5000"
     volumes:
       - .:/app
-    depends_on:
-      - mongo
     environment:
+      - MONGO_URI=mongodb://mongo:27017/rc_recommunity
       - FLASK_ENV=development
       - FLASK_DEBUG=1
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo:latest
