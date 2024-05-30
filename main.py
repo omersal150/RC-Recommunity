@@ -13,20 +13,27 @@ mongo = PyMongo(app)
 @app.route('/')
 def index():
     if 'username' in session:
-        return redirect(url_for('home'))  # Redirect to home page if logged in
-    return render_template('index.html')  # Render index page if not logged in
+        return redirect(url_for('home'))  # enter the site if logged in
+    return render_template('index.html')  # Go to login page if not logged in
 
 @app.route('/home')
 def home():
     if 'username' in session:
-        username = session['username']  # Get username from session
-        return render_template('home.html', username=username)  # Pass username to template
+        username = session['username']  # Get the username that logged in
+        return render_template('home.html', username=username)
     return redirect(url_for('login'))
 
 @app.route('/admin')
 def admin():
     if 'username' in session:
-        return render_template('admin.html')  # Render the admin page
+        with open('admins.txt', 'r') as file:
+            admin_usernames = [line.strip() for line in file]
+
+        if session['username'] in admin_usernames:
+            return render_template('admin.html')
+        else:
+            flash('You do not have permission to access this page.', 'error')
+            return redirect(url_for('home'))
     return redirect(url_for('login'))
 
 @app.route('/add_model', methods=['POST'])
@@ -40,7 +47,7 @@ def add_model():
         pros_cons = request.form.get('pros_cons')
         image_urls = [
             request.form.get(f'image_url_{i+1}') for i in range(3)
-        ]  # Get up to 3 image URLs
+        ]
         
         new_model = {
             'media_link': media_link,
@@ -49,7 +56,7 @@ def add_model():
             'year_of_release': year_of_release,
             'description': description,
             'pros_cons': pros_cons,
-            'image_urls': image_urls,  # Add image URLs to the model data
+            'image_urls': image_urls,
             'created_by': session['username'],
             'created_at': datetime.utcnow()
         }
@@ -66,24 +73,24 @@ def register():
         email = request.form.get('email')
         password = request.form.get('password')
 
-        # Check if email or username is already registered
+        # Code to check if user already created
         existing_user = mongo.db.users.find_one({'$or': [{'email': email}, {'username': username}]})
         if existing_user:
             flash('Email or username already registered.', 'error')
             return redirect(url_for('register'))
 
         try:
-            # Hash the password
+            # hashing the password of the created account
             hashed_password = generate_password_hash(password)
 
-            # Create a new user in DB
+            # DB account creation
             new_user = {
                 'username': username,
                 'email': email,
                 'password': hashed_password
             }
 
-            # Insert the new user into the DB
+            # pushing the user info to the DB
             mongo.db.users.insert_one(new_user)
 
             flash('Registration successful. Please log in.', 'success')
@@ -100,8 +107,7 @@ def login():
     if request.method == 'POST':
         username_or_email = request.form.get('username_or_email')
         password = request.form.get('password')
-
-        # Find user by username or email
+     
         user = mongo.db.users.find_one({'$or': [{'username': username_or_email}, {'email': username_or_email}]})
 
         if user and check_password_hash(user['password'], password):
@@ -111,7 +117,6 @@ def login():
             flash('Invalid username/email or password combination.', 'error')
             return render_template('login.html')
 
-    # If fails render to login again after GET request
     return render_template('login.html')
 
 @app.route('/models')
@@ -143,7 +148,7 @@ def model_detail(model_id):
         model = mongo.db.models.find_one({'_id': ObjectId(model_id)})
         comments = list(mongo.db.comments.find({'model_id': model_id}))
 
-        # Transform YouTube URL if necessary
+        # getting the video to the right format ((****FIX IT LATER****))
         if 'youtube.com/watch?v=' in model.get('video_url', ''):
             model['video_url'] = model['video_url'].replace('watch?v=', 'embed/')
 
