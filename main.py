@@ -3,6 +3,7 @@ from flask_pymongo import PyMongo
 from werkzeug.security import generate_password_hash, check_password_hash
 import requests
 from datetime import datetime
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 app.secret_key = "337234"
@@ -21,8 +22,40 @@ def home():
         username = session['username']  # Get username from session
         return render_template('home.html', username=username)  # Pass username to template
     return redirect(url_for('login'))
-@app.route('/register', methods=['GET', 'POST'])
 
+@app.route('/admin')
+def admin():
+    if 'username' in session:
+        return render_template('admin.html')  # Render the admin page
+    return redirect(url_for('login'))
+
+@app.route('/add_model', methods=['POST'])
+def add_model():
+    if 'username' in session:
+        media_link = request.form.get('media_link')
+        model_name = request.form.get('model_name')
+        manufacture = request.form.get('manufacture')
+        year_of_release = request.form.get('year_of_release')
+        description = request.form.get('description')
+        pros_cons = request.form.get('pros_cons')
+        
+        new_model = {
+            'media_link': media_link,
+            'model_name': model_name,
+            'manufacture': manufacture,
+            'year_of_release': year_of_release,
+            'description': description,
+            'pros_cons': pros_cons,
+            'created_by': session['username'],
+            'created_at': datetime.utcnow()
+        }
+        
+        mongo.db.models.insert_one(new_model)
+        flash('Model added successfully!', 'success')
+        return redirect(url_for('admin'))
+    return redirect(url_for('login'))
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form.get('username')
@@ -43,7 +76,7 @@ def register():
             new_user = {
                 'username': username,
                 'email': email,
-                'password': hashed_password # ADD THE DOB SECTION TO DB
+                'password': hashed_password
             }
 
             # Insert the new user into the DB
@@ -77,10 +110,28 @@ def login():
     # If fails render to login again after GET request
     return render_template('login.html')
 
+@app.route('/models')
+def models():
+    if 'username' in session:
+        models = mongo.db.models.find()
+        return render_template('models.html', models=models)
+    return redirect(url_for('login'))
+
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
+@app.route('/model/<model_id>')
+def model_detail(model_id):
+    if 'username' in session:
+        model = mongo.db.models.find_one({'_id': ObjectId(model_id)})
+        if model:
+            return render_template('model_detail.html', model=model)
+        else:
+            flash('Model not found!', 'error')
+            return redirect(url_for('models'))
+    return redirect(url_for('login'))
+    
 if __name__ == '__main__':
     app.run(debug=True)

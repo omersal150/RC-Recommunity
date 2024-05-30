@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>{{ model.model_name }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: #ffffff url(https://i.ytimg.com/vi/PEhFeRjd8BA/maxresdefault.jpg) center 5%/cover no-repeat;
+            background: #ffffff;
         }
         .header {
             background-color: #4f4f4f;
@@ -34,6 +34,17 @@
         .footer p {
             margin-bottom: 0;
         }
+        .model-detail {
+            text-align: left;
+            max-width: 800px;
+            margin: 0 auto;
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .model-detail h2 {
+            margin-top: 0;
+        }
     </style>
 </head>
 <body>
@@ -50,9 +61,18 @@
     </div>
     
     <div class="container">
-        <h1>Welcome to RC Recommunity <span>{{ username }}</span></h1>
-        <p>Here you can find reviews and recommendations for the most known RC models</p>
-        <button onclick="window.location.href='/models'">Show Models</button>
+        <div class="model-detail">
+            <h2>{{ model.model_name }}</h2>
+            <p><strong>Manufacture:</strong> {{ model.manufacture }}</p>
+            <p><strong>Year of Release:</strong> {{ model.year_of_release }}</p>
+            <p><strong>Description:</strong> {{ model.description }}</p>
+            <p><strong>Pro's/Con's:</strong> {{ model.pros_cons }}</p>
+            {% if 'youtube.com' in model.media_link %}
+                <iframe width="560" height="315" src="{{ model.media_link }}" frameborder="0" allowfullscreen></iframe>
+            {% else %}
+                <img src="{{ model.media_link }}" alt="{{ model.model_name }}" style="max-width: 100%;">
+            {% endif %}
+        </div>
     </div>
     
     <div class="footer">

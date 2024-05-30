@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Models</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background: #ffffff url(https://i.ytimg.com/vi/PEhFeRjd8BA/maxresdefault.jpg) center 5%/cover no-repeat;
+            background: #ffffff;
         }
         .header {
             background-color: #4f4f4f;
@@ -34,6 +34,20 @@
         .footer p {
             margin-bottom: 0;
         }
+        .model-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .model-list li {
+            background: #f4f4f4;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .model-list a {
+            text-decoration: none;
+            color: #333;
+        }
     </style>
 </head>
 <body>
@@ -50,9 +64,14 @@
     </div>
     
     <div class="container">
-        <h1>Welcome to RC Recommunity <span>{{ username }}</span></h1>
-        <p>Here you can find reviews and recommendations for the most known RC models</p>
-        <button onclick="window.location.href='/models'">Show Models</button>
+        <h1>Models</h1>
+        <ul class="model-list">
+            {% for model in models %}
+                <li>
+                    <a href="{{ url_for('model_detail', model_id=model._id) }}">{{ model.model_name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
     
     <div class="footer">
