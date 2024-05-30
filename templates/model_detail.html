@@ -60,12 +60,6 @@
             height: auto;
             margin-bottom: 10px;
         }
-        /* Style for videos */
-        .media iframe {
-            width: 560px;
-            height: 315px;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
@@ -94,12 +88,6 @@
                     {% for image_url in model.image_urls %}
                         <img src="{{ image_url }}" alt="{{ model.model_name }}">
                     {% endfor %}
-                </div>
-            {% endif %}
-            {% if model.video_url %}
-                <h2>Video</h2>
-                <div class="video-gallery">
-                    <iframe width="560" height="315" src="{{ model.video_url }}" frameborder="0" allowfullscreen></iframe>
                 </div>
             {% endif %}
         </div>
