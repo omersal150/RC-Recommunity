@@ -1,0 +1,45 @@
+# Define the image repository and tag
+image:
+  repository: omersal/rc-recommunity
+  tag: latest
+
+# Service configuration
+service:
+  type: ClusterIP
+  port: 5000
+  targetPort: 5000
+
+# MongoDB configuration
+mongodb:
+  enabled: true
+  image:
+    repository: mongo
+    tag: latest
+  port: 27017
+
+env:
+  MONGO_URI: "mongodb://mongo:27017/rc_recommunity"
+  FLASK_ENV: "development"  # Make sure this line is present
+  FLASK_DEBUG: "1"
+
+# Jenkins configuration
+jenkins:
+  enabled: true
+
+hpa:
+  enabled: false
+  
+# Grafana configuration
+grafana:
+  enabled: true
+
+# Prometheus configuration
+prometheus:
+  enabled: true
+
+# ArgoCD configuration
+argocd:
+  enabled: true
+
+ingress:
+  enabled: true

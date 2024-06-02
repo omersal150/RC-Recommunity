@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ model.model_name }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background: #ffffff url(https://i.ytimg.com/vi/PEhFeRjd8BA/maxresdefault.jpg) center 5%/cover no-repeat;
+        }
+        .header {
+            background-color: #4f4f4f;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .container {
+            flex: 1;
+            padding: 20px;
+        }
+        .footer {
+            background-color: #6e6d6d;
+            padding: 10px;
+            text-align: center;
+        }
+        .footer p {
+            margin-bottom: 0;
+        }
+        .comment-form {
+            margin-top: 20px;
+        }
+        .comment-form textarea {
+            width: 100%;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .comment {
+            background-color: #f4f4f4;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .comment .text {
+            margin-bottom: 5px;
+        }
+        .comment .user {
+            font-style: italic;
+        }
+        /* Style for images */
+        .media img {
+            width: 500px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button onclick="window.location.href='/home'">Home</button>
+        <form action="/search" method="GET">
+            <input type="text" name="query" placeholder="Search models...">
+            <button type="submit">Search</button>
+        </form>
+        <form action="/logout" method="GET">
+            <button type="submit">Logout</button>
+        </form>    
+    </div>
+    
+    <div class="container">
+        <h1>{{ model.model_name }}</h1>
+        <p>Manufacture: {{ model.manufacture }}</p>
+        <p>Year of release: {{ model.year_of_release }}</p>
+        <p>Description: {{ model.description }}</p>
+        <p>Pro's/Con's: {{ model.pros_cons }}</p>
+        <div class="media">
+            {% if model.image_urls %}
+                <h2>Images</h2>
+                <div class="image-gallery">
+                    {% for image_url in model.image_urls %}
+                        <img src="{{ image_url }}" alt="{{ model.model_name }}">
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <h2 style="margin-top: 30px;">Comments</h2>
+        <div class="comments">
+            {% for comment in comments %}
+                <div class="comment">
+                    <p class="text">{{ comment.text }}</p>
+                    <p class="rating">Rating: {{ comment.rating }} stars</p>
+                    <p class="user">by {{ comment.username }}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        <h2>Add a Comment</h2>
+        <form class="comment-form" action="{{ url_for('add_comment', model_id=model._id) }}" method="POST">
+            <textarea name="comment" placeholder="Write your comment..."></textarea>
+            <label for="rating">Rating:</label>
+            <select name="rating">
+                <option value="1">1 star</option>
+                <option value="2">2 stars</option>
+                <option value="3">3 stars</option>
+                <option value="4">4 stars</option>
+                <option value="5">5 stars</option>
+            </select>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    
+    <div class="footer">
+        <p>Got a suggestion? Encountered a bug? Contact us: <a href="mailto:omer.salamander@gmail.com">omer.salamander@gmail.com</a></p>
+    </div>
+
+</body>
+</html>
