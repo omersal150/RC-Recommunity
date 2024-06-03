@@ -1,25 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "rc-recommunity-helm.fullname" . }}
+  name: rc-recommunity
+  namespace: rc-recommunity
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "rc-recommunity-helm.name" . }}
+      app: rc-recommunity
   template:
     metadata:
       labels:
-        app: {{ include "rc-recommunity-helm.name" . }}
+        app: rc-recommunity
     spec:
       containers:
-        - name: {{ .Chart.Name }}
+        - name: rc-recommunity
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           ports:
-            - containerPort: 5000
+            - containerPort: {{ .Values.service.port }}
           env:
             - name: MONGO_URI
-              value: "{{ .Values.mongodb.uri }}"
+              value: "{{ .Values.env.MONGO_URI }}"
             - name: FLASK_ENV
               value: "{{ .Values.env.FLASK_ENV }}"
             - name: FLASK_DEBUG
