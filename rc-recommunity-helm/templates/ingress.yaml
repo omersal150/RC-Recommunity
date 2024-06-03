@@ -13,4 +13,4 @@ spec:
               service:
                 name: {{ include "rc-recommunity-helm.fullname" . }}
                 port:
-                  number: 5000
+                  number: 30000
