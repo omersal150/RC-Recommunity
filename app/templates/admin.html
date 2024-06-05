@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Add a Model</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #ffffff url(https://i.ytimg.com/vi/PEhFeRjd8BA/maxresdefault.jpg) center 5%/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #4f4f4f;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+            flex: 1;
+            margin-bottom: 100px; /* Add margin to create space between form and footer */
+        }
+        .footer {
+            background-color: #6e6d6d;
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+        .footer p {
+            margin-bottom: 0;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button onclick="window.location.href='/home'">Home</button>
+        <form action="#" method="GET">
+            <input type="text" name="search" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+        <form action="/logout" method="GET">
+            <button type="submit">Logout</button>
+        </form>    
+    </div>
+    
+    <div class="container">
+        <h1>Add a Model</h1>
+        <div class="form-container">
+            <form action="/add_model" method="POST">
+                <div class="form-group">
+                    <label for="model_name">Model Name:</label>
+                    <input type="text" id="model_name" name="model_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="manufacture">Manufacture:</label>
+                    <input type="text" id="manufacture" name="manufacture" required>
+                </div>
+                <div class="form-group">
+                    <label for="year_of_release">Year of Release:</label>
+                    <input type="text" id="year_of_release" name="year_of_release" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <textarea id="description" name="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="pros_cons">Pro's/Con's:</label>
+                    <textarea id="pros_cons" name="pros_cons" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="image_url1">Image URL 1:</label>
+                    <input type="text" id="image_url1" name="image_url_1">
+                </div>
+                <div class="form-group">
+                    <label for="image_url2">Image URL 2:</label>
+                    <input type="text" id="image_url2" name="image_url_2">
+                </div>
+                <div class="form-group">
+                    <label for="image_url3">Image URL 3:</label>
+                    <input type="text" id="image_url3" name="image_url_3">
+                </div>
+                <button type="submit">Add Model</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Got a suggestion? Encountered a bug? Contact us: <a href="mailto:omer.salamander@gmail.com">omer.salamander@gmail.com</a></p>
+    </div>
+
+</body>
+</html>

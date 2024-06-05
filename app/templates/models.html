@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Models</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #ffffff url(https://i.ytimg.com/vi/PEhFeRjd8BA/maxresdefault.jpg) center 5%/cover no-repeat;
+        }
+        .header {
+            background-color: #4f4f4f;
+            color: #fff;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .container {
+            text-align: center;
+            padding: 20px;
+        }
+        .footer {
+            background-color: #6e6d6d;
+            padding: 10px;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        .footer p {
+            margin-bottom: 0;
+        }
+        .model-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .model-list li {
+            background: #f4f4f4;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .model-list a {
+            text-decoration: none;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <button onclick="window.location.href='/home'">Home</button>
+        <form action="#" method="GET">
+            <input type="text" name="search" placeholder="Search...">
+            <button type="submit">Search</button>
+        </form>
+        <form action="/logout" method="GET">
+            <button type="submit">Logout</button>
+        </form>    
+    </div>
+    
+    <div class="container">
+        <h1>Models</h1>
+        <ul class="model-list">
+            {% for model in models %}
+                <li>
+                    <a href="{{ url_for('model_detail', model_id=model._id) }}">{{ model.model_name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <div class="footer">
+        <p>Got a suggestion? Encountered a bug? Contact us: <a href="mailto:omer.salamander@gmail.com">omer.salamander@gmail.com</a></p>
+    </div>
+
+</body>
+</html>
