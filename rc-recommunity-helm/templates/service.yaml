@@ -9,8 +9,8 @@ spec:
     app: rc-recommunity-helm
   ports:
     - protocol: TCP
-      port: 30000
-      targetPort: 30000
+      port: 8080
+      targetPort: 8080
       nodePort: 30001
 
 
