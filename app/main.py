@@ -148,6 +148,10 @@ def model_detail(model_id):
         model = mongo.db.models.find_one({'_id': ObjectId(model_id)})
         comments = list(mongo.db.comments.find({'model_id': model_id}))
 
+        if 'youtube.com/watch?v=' in model.get('video_url', ''):
+            model['video_url'] = model['video_url'].replace('watch?v=', 'embed/')
+
+        return render_template('model_detail.html', model=model, comments=comments)
     return redirect(url_for('login'))
 
 @app.route('/model/<model_id>/comment', methods=['POST'])
