@@ -7,21 +7,15 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: rc-recommunity
+      app: rc-recommunity-helm
   template:
     metadata:
       labels:
-        app: rc-recommunity
+        app: rc-recommunity-helm
     spec:
       containers:
-        - name: rc-recommunity
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          ports:
-            - containerPort: {{ .Values.service.port }}
-          env:
-            - name: MONGO_URI
-              value: "{{ .Values.env.MONGO_URI }}"
-            - name: FLASK_ENV
-              value: "{{ .Values.env.FLASK_ENV }}"
-            - name: FLASK_DEBUG
-              value: "{{ .Values.env.FLASK_DEBUG }}"
+      - name: rc-recommunity
+        image: omersal/rc-recommunity:latest
+        ports:
+        - containerPort: 8080
+          name: http
