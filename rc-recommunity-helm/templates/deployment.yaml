@@ -14,8 +14,35 @@ spec:
         app: rc-recommunity-helm
     spec:
       containers:
-      - name: rc-recommunity
-        image: omersal/rc-recommunity:latest
-        ports:
-        - containerPort: 8080
-          name: http
+        - name: rc-recommunity
+          image: omersal/rc-recommunity:latest
+          ports:
+            - containerPort: 8080
+              name: htto
+          env:
+            - name: MONGO_URI
+              value: "mongodb://mongo:27017/rc_recommunity"
+            - name: FLASK_ENV
+              value: "development"
+            - name: FLASK_DEBUG
+              value: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rc-recommunity
+  namespace: rc-recommunity
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 8080
+      nodePort: 30002
+  selector:
+    app: rc-recommunity-helm
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: rc-recommunity
+  namespace: rc-recommunity

@@ -6,7 +6,7 @@ service:
   type: NodePort
   port: 8080
   targetPort: 8080
-  nodePort: 8080
+  nodePort: 30000
 
 mongodb:
   enabled: true
@@ -16,7 +16,7 @@ mongodb:
   port: 27017
 
 env:
-  MONGO_URI: "mongodb://mongodb:27017/rc_recommunity"
+  MONGO_URI: "mongodb://mongo:27017/rc_recommunity"
   FLASK_ENV: "development"
   FLASK_DEBUG: "1"
   
@@ -25,6 +25,9 @@ serviceAccount:
 
 jenkins:
   enabled: true
+  image:
+    repository: jenkins
+    tag: lts
 
 hpa:
   enabled: false
